@@ -1,5 +1,5 @@
 # VendorTrust - Street Food Supply Chain Platform
-# tsm-3.vercel.app/
+# [tsm-3.vercel.app/](https://tsm-3.vercel.app/)
 
 A comprehensive B2B platform designed specifically for Indian street food vendors to connect with trusted, verified suppliers for raw materials.
 
