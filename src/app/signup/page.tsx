@@ -61,20 +61,22 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background p-4">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-background via-background to-muted/20 p-4">
       <div className="w-full max-w-md">
-        <Link href="/" className="flex items-center justify-center gap-2 font-bold text-2xl mb-6">
-          <Shield className="h-8 w-8 text-primary" />
+        <Link href="/" className="flex items-center justify-center gap-3 font-bold text-2xl mb-8">
+          <div className="p-3 bg-primary/10 rounded-xl">
+            <Shield className="h-8 w-8 text-primary" />
+          </div>
           <span className="font-headline">VendorTrust</span>
         </Link>
-        <Card>
+        <Card className="border-0 shadow-2xl bg-background/80 backdrop-blur-md">
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-headline">Create an Account</CardTitle>
-            <CardDescription>Join our network of vendors and suppliers.</CardDescription>
+            <CardTitle className="text-3xl font-headline mb-2">Create an Account</CardTitle>
+            <CardDescription className="text-base">Join our network of vendors and suppliers.</CardDescription>
           </CardHeader>
           <CardContent>
-            <form className="space-y-4" onSubmit={handleSignup}>
-              <div className="space-y-2">
+            <form className="space-y-6" onSubmit={handleSignup}>
+              <div className="space-y-3">
                 <Label htmlFor="companyName">Company Name</Label>
                 <Input
                   id="companyName"
@@ -83,9 +85,10 @@ export default function SignupPage() {
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
                   disabled={loading}
+                  className="h-12 rounded-lg"
                 />
               </div>
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
@@ -95,9 +98,10 @@ export default function SignupPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={loading}
+                  className="h-12 rounded-lg"
                 />
               </div>
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <Label htmlFor="password">Password</Label>
                 <Input
                   id="password"
@@ -106,13 +110,14 @@ export default function SignupPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={loading}
+                  className="h-12 rounded-lg"
                 />
               </div>
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <Label>I am a...</Label>
                 <RadioGroup
                   defaultValue="vendor"
-                  className="flex gap-4 pt-1"
+                  className="grid grid-cols-2 gap-4 pt-2"
                   onValueChange={(value) => setUserRole(value)}
                   disabled={loading}
                 >
@@ -120,29 +125,35 @@ export default function SignupPage() {
                     <RadioGroupItem value="supplier" id="supplier" className="peer sr-only" />
                     <Label
                       htmlFor="supplier"
-                      className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                      className="flex flex-col items-center justify-center rounded-xl border-2 border-muted bg-popover p-6 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 [&:has([data-state=checked])]:border-primary cursor-pointer transition-all"
                     >
-                      Supplier
+                      <div className="text-center">
+                        <div className="font-semibold">Supplier</div>
+                        <div className="text-xs text-muted-foreground mt-1">Sell ingredients</div>
+                      </div>
                     </Label>
                   </div>
                   <div>
                     <RadioGroupItem value="vendor" id="vendor" className="peer sr-only" />
                     <Label
                       htmlFor="vendor"
-                      className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                      className="flex flex-col items-center justify-center rounded-xl border-2 border-muted bg-popover p-6 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 [&:has([data-state=checked])]:border-primary cursor-pointer transition-all"
                     >
-                      Vendor
+                      <div className="text-center">
+                        <div className="font-semibold">Vendor</div>
+                        <div className="text-xs text-muted-foreground mt-1">Buy ingredients</div>
+                      </div>
                     </Label>
                   </div>
                 </RadioGroup>
               </div>
-              <Button type="submit" className="w-full" disabled={loading}>
+              <Button type="submit" className="w-full h-12 text-base shadow-lg hover:shadow-xl transition-all" disabled={loading}>
                 {loading ? 'Creating Account...' : 'Create Account'}
               </Button>
             </form>
-            <div className="mt-4 text-center text-sm">
+            <div className="mt-6 text-center text-sm">
               Already have an account?{' '}
-              <Link href="/login" className="underline">
+              <Link href="/login" className="text-primary hover:underline font-medium">
                 Login
               </Link>
             </div>
