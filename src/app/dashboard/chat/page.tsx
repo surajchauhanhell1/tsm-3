@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";  // Added Suspense
 import { useSearchParams } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -273,139 +273,141 @@ export default function ChatPage() {
   };
   
   return (
-    <div className="grid h-[calc(100vh-theme(spacing.20))] grid-cols-1 md:grid-cols-[300px_1fr] gap-4">
-        {/* Conversations List */}
-        <div className="flex flex-col bg-card border rounded-lg">
-            <div className="p-4 border-b">
-                <h2 className="text-xl font-semibold">Conversations</h2>
-            </div>
-            <div className="flex-grow overflow-y-auto">
-                {/* Active Conversation */}
-                <div className="flex items-center gap-3 p-4 bg-accent/50 border-r-4 border-primary cursor-pointer">
-                    <Avatar>
-                        <AvatarImage src="https://placehold.co/40x40.png" alt="User" data-ai-hint="person avatar" />
-                        <AvatarFallback>JD</AvatarFallback>
-                    </Avatar>
-                    <div className="flex-grow">
-                        <p className="font-semibold">John Doe</p>
-                        <p className="text-sm text-muted-foreground truncate">Yes, that sounds good. Let's proceed.</p>
-                    </div>
-                </div>
-                {/* Other Conversations */}
-                 <div className="flex items-center gap-3 p-4 hover:bg-muted cursor-pointer">
-                    <Avatar>
-                        <AvatarImage src="https://placehold.co/40x40.png" alt="User" data-ai-hint="person avatar" />
-                        <AvatarFallback>SM</AvatarFallback>
-                    </Avatar>
-                    <div className="flex-grow">
-                        <p className="font-semibold">Sarah Miller</p>
-                        <p className="text-sm text-muted-foreground truncate">I have a question about my last order.</p>
-                    </div>
-                </div>
-                 <div className="flex items-center gap-3 p-4 hover:bg-muted cursor-pointer">
-                    <Avatar>
-                        <AvatarImage src="https://placehold.co/40x40.png" alt="User" data-ai-hint="person avatar" />
-                        <AvatarFallback>CB</AvatarFallback>
-                    </Avatar>
-                    <div className="flex-grow">
-                        <p className="font-semibold">Creative Supplies</p>
-                        <p className="text-sm text-muted-foreground truncate">Can you provide a new quote?</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <div className="grid h-[calc(100vh-theme(spacing.20))] grid-cols-1 md:grid-cols-[300px_1fr] gap-4">
+          {/* Conversations List */}
+          <div className="flex flex-col bg-card border rounded-lg">
+              <div className="p-4 border-b">
+                  <h2 className="text-xl font-semibold">Conversations</h2>
+              </div>
+              <div className="flex-grow overflow-y-auto">
+                  {/* Active Conversation */}
+                  <div className="flex items-center gap-3 p-4 bg-accent/50 border-r-4 border-primary cursor-pointer">
+                      <Avatar>
+                          <AvatarImage src="https://placehold.co/40x40.png" alt="User" data-ai-hint="person avatar" />
+                          <AvatarFallback>JD</AvatarFallback>
+                      </Avatar>
+                      <div className="flex-grow">
+                          <p className="font-semibold">John Doe</p>
+                          <p className="text-sm text-muted-foreground truncate">Yes, that sounds good. Let's proceed.</p>
+                      </div>
+                  </div>
+                  {/* Other Conversations */}
+                   <div className="flex items-center gap-3 p-4 hover:bg-muted cursor-pointer">
+                      <Avatar>
+                          <AvatarImage src="https://placehold.co/40x40.png" alt="User" data-ai-hint="person avatar" />
+                          <AvatarFallback>SM</AvatarFallback>
+                      </Avatar>
+                      <div className="flex-grow">
+                          <p className="font-semibold">Sarah Miller</p>
+                          <p className="text-sm text-muted-foreground truncate">I have a question about my last order.</p>
+                      </div>
+                  </div>
+                   <div className="flex items-center gap-3 p-4 hover:bg-muted cursor-pointer">
+                      <Avatar>
+                          <AvatarImage src="https://placehold.co/40x40.png" alt="User" data-ai-hint="person avatar" />
+                          <AvatarFallback>CB</AvatarFallback>
+                      </Avatar>
+                      <div className="flex-grow">
+                          <p className="font-semibold">Creative Supplies</p>
+                          <p className="text-sm text-muted-foreground truncate">Can you provide a new quote?</p>
+                      </div>
+                  </div>
+              </div>
+          </div>
 
-        {/* Chat Window */}
-        <div className="flex flex-col bg-card border rounded-lg">
-            {!activeConversation ? (
-                <div className="flex-grow flex items-center justify-center p-4">
-                    <div className="text-center">
-                        <h3 className="text-lg font-medium mb-2">Select a conversation</h3>
-                        <p className="text-muted-foreground">Choose a conversation from the list or start a new one</p>
-                    </div>
-                </div>
-            ) : (
-                <>
-                    <div className="p-4 border-b flex items-center gap-4">
-                        <Avatar>
-                            <AvatarImage src={activeConversation.user.avatar} alt={activeConversation.user.name} />
-                            <AvatarFallback>
-                                {activeConversation.user.name.split(' ').map(n => n[0]).join('')}
-                            </AvatarFallback>
-                        </Avatar>
-                        <div>
-                            <p className="font-semibold">
-                                {activeConversation.user.name}
-                                {activeConversation.user.company && ` (${activeConversation.user.company})`}
-                            </p>
-                            <p className="text-sm text-green-500 flex items-center gap-2">
-                                <span className="relative flex h-2 w-2">
-                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                                </span>
-                                Online
-                            </p>
-                        </div>
-                    </div>
-                    <div className="flex-grow p-4 overflow-y-auto space-y-4">
-                        {messages.length === 0 ? (
-                            <div className="text-center text-muted-foreground py-8">
-                                No messages yet. Start the conversation!
-                            </div>
-                        ) : (
-                            messages.map((msg) => {
-                                const isCurrentUser = msg.senderId === currentUser.id;
-                                return (
-                                    <div key={msg.id} className={`flex items-end gap-2 ${isCurrentUser ? 'justify-end' : ''}`}>
-                                        {!isCurrentUser && (
-                                            <Avatar className="h-8 w-8">
-                                                <AvatarImage src={activeConversation.user.avatar} alt={activeConversation.user.name} />
-                                                <AvatarFallback>
-                                                    {activeConversation.user.name.split(' ').map(n => n[0]).join('')}
-                                                </AvatarFallback>
-                                            </Avatar>
-                                        )}
-                                        <div className={`rounded-lg p-3 max-w-xs ${isCurrentUser ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
-                                            <p className="text-sm">{msg.text}</p>
-                                            {msg.timestamp && (
-                                                <p className="text-xs text-right mt-1 opacity-70">
-                                                    {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                                </p>
-                                            )}
-                                        </div>
-                                        {isCurrentUser && (
-                                            <Avatar className="h-8 w-8">
-                                                <AvatarImage src={currentUser.avatar} alt="You" />
-                                                <AvatarFallback>ME</AvatarFallback>
-                                            </Avatar>
-                                        )}
-                                    </div>
-                                );
-                            })
-                        )}
-                        <div ref={messagesEndRef} />
-                    </div>
-                    <div className="p-4 border-t">
-                        <form className="flex items-center gap-2" onSubmit={sendMessage}>
-                            <Input 
-                                placeholder="Type your message..." 
-                                className="flex-grow" 
-                                value={message}
-                                onChange={(e) => setMessage(e.target.value)}
-                            />
-                            <Button type="button" variant="ghost" size="icon">
-                                <Paperclip className="h-5 w-5" />
-                                <span className="sr-only">Attach file</span>
-                            </Button>
-                            <Button type="submit" size="icon" disabled={!message.trim()}>
-                                <Send className="h-5 w-5" />
-                                <span className="sr-only">Send message</span>
-                            </Button>
-                        </form>
-                    </div>
-                </>
-            )}
-        </div>
-    </div>
+          {/* Chat Window */}
+          <div className="flex flex-col bg-card border rounded-lg">
+              {!activeConversation ? (
+                  <div className="flex-grow flex items-center justify-center p-4">
+                      <div className="text-center">
+                          <h3 className="text-lg font-medium mb-2">Select a conversation</h3>
+                          <p className="text-muted-foreground">Choose a conversation from the list or start a new one</p>
+                      </div>
+                  </div>
+              ) : (
+                  <>
+                      <div className="p-4 border-b flex items-center gap-4">
+                          <Avatar>
+                              <AvatarImage src={activeConversation.user.avatar} alt={activeConversation.user.name} />
+                              <AvatarFallback>
+                                  {activeConversation.user.name.split(' ').map(n => n[0]).join('')}
+                              </AvatarFallback>
+                          </Avatar>
+                          <div>
+                              <p className="font-semibold">
+                                  {activeConversation.user.name}
+                                  {activeConversation.user.company && ` (${activeConversation.user.company})`}
+                              </p>
+                              <p className="text-sm text-green-500 flex items-center gap-2">
+                                  <span className="relative flex h-2 w-2">
+                                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                      <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                                  </span>
+                                  Online
+                              </p>
+                          </div>
+                      </div>
+                      <div className="flex-grow p-4 overflow-y-auto space-y-4">
+                          {messages.length === 0 ? (
+                              <div className="text-center text-muted-foreground py-8">
+                                  No messages yet. Start the conversation!
+                              </div>
+                          ) : (
+                              messages.map((msg) => {
+                                  const isCurrentUser = msg.senderId === currentUser.id;
+                                  return (
+                                      <div key={msg.id} className={`flex items-end gap-2 ${isCurrentUser ? 'justify-end' : ''}`}>
+                                          {!isCurrentUser && (
+                                              <Avatar className="h-8 w-8">
+                                                  <AvatarImage src={activeConversation.user.avatar} alt={activeConversation.user.name} />
+                                                  <AvatarFallback>
+                                                      {activeConversation.user.name.split(' ').map(n => n[0]).join('')}
+                                                  </AvatarFallback>
+                                              </Avatar>
+                                          )}
+                                          <div className={`rounded-lg p-3 max-w-xs ${isCurrentUser ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
+                                              <p className="text-sm">{msg.text}</p>
+                                              {msg.timestamp && (
+                                                  <p className="text-xs text-right mt-1 opacity-70">
+                                                      {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                  </p>
+                                              )}
+                                          </div>
+                                          {isCurrentUser && (
+                                              <Avatar className="h-8 w-8">
+                                                  <AvatarImage src={currentUser.avatar} alt="You" />
+                                                  <AvatarFallback>ME</AvatarFallback>
+                                              </Avatar>
+                                          )}
+                                      </div>
+                                  );
+                              })
+                          )}
+                          <div ref={messagesEndRef} />
+                      </div>
+                      <div className="p-4 border-t">
+                          <form className="flex items-center gap-2" onSubmit={sendMessage}>
+                              <Input 
+                                  placeholder="Type your message..." 
+                                  className="flex-grow" 
+                                  value={message}
+                                  onChange={(e) => setMessage(e.target.value)}
+                              />
+                              <Button type="button" variant="ghost" size="icon">
+                                  <Paperclip className="h-5 w-5" />
+                                  <span className="sr-only">Attach file</span>
+                              </Button>
+                              <Button type="submit" size="icon" disabled={!message.trim()}>
+                                  <Send className="h-5 w-5" />
+                                  <span className="sr-only">Send message</span>
+                              </Button>
+                          </form>
+                      </div>
+                  </>
+              )}
+          </div>
+      </div>
+    </Suspense>
   );
 }
